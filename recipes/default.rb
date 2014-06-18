@@ -41,7 +41,7 @@ if node[:environment] == 'production'
   bash 'Adding visual flags for production environment' do
     user 'root'
     code <<-EOC
-      %Q{echo "cat #{banner_path}" >> #{bashrc}}
+      echo "cat #{banner_path}" >> #{bashrc}
     EOC
   end
 
