@@ -27,15 +27,9 @@ end
 
 # Add a banner to ssh login if we're in the production environment
 if node[:environment] == 'production'
-  sshd_config = '/etc/ssh/sshd_config'
-
-  seds = []
-  echos = []
+  bashrc = '/etc/bash.bashrc'
 
   banner_path = '/etc/ssh_banner'
-
-  seds << 's/^Banner/#Banner/g'
-  echos << "Banner #{banner_path}"
 
   template banner_path do
     owner 'root'
@@ -47,8 +41,7 @@ if node[:environment] == 'production'
   bash 'Adding visual flags for production environment' do
     user 'root'
     code <<-EOC
-      #{seds.map { |rx| "sed -i '#{rx}' #{sshd_config}" }.join("\n")}
-      #{echos.map { |e| %Q{echo "#{e}" >> #{sshd_config}} }.join("\n")}
+      %Q{echo "cat #{banner_path}" >> #{bashrc}}
     EOC
   end
 
